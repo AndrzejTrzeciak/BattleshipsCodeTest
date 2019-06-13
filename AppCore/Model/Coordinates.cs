@@ -10,8 +10,8 @@ namespace AppCore.Model
 
     public class Coordinates : IEquatable<Coordinates>
     {
-        public short X;
-        public short Y;
+        public int X;
+        public int Y;
 
         public override bool Equals(object obj)
         {

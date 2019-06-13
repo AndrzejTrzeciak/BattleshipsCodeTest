@@ -42,7 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Cell.cs" />
-    <Compile Include="Model\ShotResult.cs" />
+    <Compile Include="Model\OperationResult.cs" />
+    <Compile Include="Model\Ship.cs" />
+    <Compile Include="Operations\IOperationsManager.cs" />
+    <Compile Include="Operations\OperationsManager.cs" />
     <Compile Include="Utils\CoordinatesTranslator.cs" />
     <Compile Include="Model\Coordinates.cs" />
     <Compile Include="Model\GameBoard.cs" />

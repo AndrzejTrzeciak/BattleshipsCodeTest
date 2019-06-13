@@ -10,7 +10,7 @@ namespace AppCore.Model
 
     public static class CoordinatesTranslator
     {
-        private static Dictionary<short, string> mapTostring = new Dictionary<short, string>()
+        private static Dictionary<int, string> mapTostring = new Dictionary<int, string>()
         {
             {1, "A"},
             {2, "B"},
@@ -24,7 +24,7 @@ namespace AppCore.Model
             {10, "J"}
         };
 
-        private static Dictionary<string, short> mapToDigit = new Dictionary<string, short>
+        private static Dictionary<string, int> mapToDigit = new Dictionary<string, int>
         {
             {"A", 1},
             {"B", 2},

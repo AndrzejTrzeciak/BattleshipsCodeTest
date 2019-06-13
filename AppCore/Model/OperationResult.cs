@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 namespace AppCore.Model
 {
 
-    public enum ShotResult
+    public enum OperationResult
     {
+        shipPlaced,
         mishit,
         hit,
         sink
