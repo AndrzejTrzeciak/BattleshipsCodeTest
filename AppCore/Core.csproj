@@ -44,6 +44,7 @@
     <Compile Include="Model\Cell.cs" />
     <Compile Include="Model\OperationResult.cs" />
     <Compile Include="Model\Ship.cs" />
+    <Compile Include="Utils\CoordinatresGenerator.cs" />
     <Compile Include="Operations\IOperationsManager.cs" />
     <Compile Include="Operations\OperationsManager.cs" />
     <Compile Include="Model\Coordinates.cs" />

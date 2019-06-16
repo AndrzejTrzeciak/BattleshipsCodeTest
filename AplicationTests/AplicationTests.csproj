@@ -67,7 +67,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="BattleShipTestBase.cs" />
+    <Compile Include="CoordinatesGeneratorTests.cs" />
+    <Compile Include="GameViewPresenterTests.cs" />
+    <Compile Include="OperationsManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

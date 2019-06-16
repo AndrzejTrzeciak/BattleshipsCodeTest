@@ -1,19 +1,15 @@
 ﻿using AppCore.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AppCore.Operations;
-using DesktopGUI.Views;
 
 namespace DesktopGUI
 {
     public class GameViewPresenter
     {
-        private IMainView mainView;
-        private IOperationsManager operationsManager;
-        private GameBoard computerGameBoard;
+        internal IMainView mainView;
+        internal IOperationsManager operationsManager;
+        internal GameBoard computerGameBoard;
 
         public GameViewPresenter(IMainView mainView, IOperationsManager operationsManager)
         {
@@ -46,27 +42,19 @@ namespace DesktopGUI
 
         private void HandleCellAttack(Coordinates cellCoordinates)
         {
-            var cell = new Cell
-            {
-                Coordinates = cellCoordinates
-            };
             OperationResult operationResult = operationsManager.PlaceShotByPlayer(cellCoordinates, computerGameBoard);
             mainView.RenderComputerGameBoard(computerGameBoard.Cells.Select(c => c.ToGameCellView()));
             if (operationResult == OperationResult.sink)
             {
-                bool gameWonByPlayer = !computerGameBoard.Cells.Any(x => x.IsOccupied && !x.IsHit);
+                bool gameWonByPlayer = !computerGameBoard.Ships.Any(ship => ship.Cells.Any(c => !c.IsSinked));
                 if (gameWonByPlayer)
                 {
-                    mainView.Inform("You won");
+                    var clickCount = computerGameBoard.Cells.Count -
+                                     computerGameBoard.Cells.Where(c => c.IsCloaked).Count();
+                    mainView.Inform($"You won. You used\n{clickCount}\nshots.");
                     mainView.PrepareNewGame();
                 }
-                else
-                {
-                    //mainView.Inform("Ship sinked!");
-                }
             }
-            //else if (operationResult == OperationResult.hit)
-                //mainView.Inform("It's a hit!");
         }
     }
 }

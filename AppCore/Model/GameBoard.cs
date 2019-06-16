@@ -34,6 +34,4 @@ namespace AppCore.Model
             }
         }
     }
-    // 1x Battleship(5 squares)
-    // 2x Destroyers(4 squares)
 }
