@@ -16,25 +16,6 @@ namespace AppCore.Operations
     public class OperationsManager : IOperationsManager
     {
 
-        public IEnumerable<Cell> PlaceShipByPlayer(IEnumerable<Coordinates> shipCoordinates, GameBoard userGameBoard)
-        {
-            var shipCells = new List<Cell>();
-            foreach (var coordinate in shipCoordinates)
-            {
-                var matchingCellInUserGameBoard =
-                    userGameBoard.Cells.FirstOrDefault(c => c.Coordinates.Equals(coordinate));
-                if (matchingCellInUserGameBoard != null)
-                    matchingCellInUserGameBoard.IsOccupied = true;
-                shipCells.Add(matchingCellInUserGameBoard);
-            }
-            userGameBoard.Ships.Add(new Ship(shipCells));
-            if (shipCoordinates.Count() == 4) //destroyer was placed
-                userGameBoard.DestroyersCount++;
-            else 
-                userGameBoard.BattleshipPlaced = true;
-            return shipCells;
-        }
-
         public void PlaceShipsForComputer(GameBoard computerGameBoard)
         {
             while (!computerGameBoard.DestroyersPlaced)
@@ -218,101 +199,6 @@ namespace AppCore.Operations
             else
                 return OperationResult.mishit;
 
-        }
-
-        public OperationResult PlaceShotByComputer(GameBoard userGameBoard)
-        {
-            var shipUnderAttack =
-                userGameBoard.Ships.FirstOrDefault(ship => ship.Cells.Any(cell => cell.IsHit && !cell.IsSinked));
-            if (shipUnderAttack != null)
-            {
-                //shoot the adjacent cells to finnish the attack
-                Cell cellToAttack = FindAdjacentCloakedCell(shipUnderAttack, userGameBoard);
-                cellToAttack.IsCloaked = false;
-                if (cellToAttack.IsOccupied)
-                {
-                    //we migth have hit an adjacent ship
-                    var ship = userGameBoard.Ships.FirstOrDefault(s => s.Cells.Contains(cellToAttack));
-                    cellToAttack.IsHit = true;
-                    if (ship.Cells.All(c => c.IsHit))
-                    {
-                        foreach (var cell in ship.Cells)
-                        {
-                            cell.IsSinked = true;
-                        }
-
-                        return OperationResult.sink;
-                    }
-
-                    return OperationResult.hit;
-                }
-                return OperationResult.hit;
-            }
-            else
-            {
-                //no ship under attack - place a random shot in a cloaked cell
-                bool cloakedCellFound = false;
-                while (!cloakedCellFound)
-                {
-                    Coordinates randomCoordinate = GenerateRandomCoordinate();
-                    Cell matchingGameBoardCell =
-                        userGameBoard.Cells.FirstOrDefault(c => c.Coordinates.Equals(randomCoordinate));
-                    if (matchingGameBoardCell.IsCloaked)
-                    {
-                        cloakedCellFound = true;
-                        matchingGameBoardCell.IsCloaked = false;
-                        if (matchingGameBoardCell.IsOccupied)
-                        {
-                            matchingGameBoardCell.IsHit = true;
-                            Ship ship = userGameBoard.Ships.FirstOrDefault(s =>
-                                s.Cells.Contains(matchingGameBoardCell));
-                            if (ship.Cells.All(c => c.IsHit)) //that situation shouldn't occur, but just in case...
-                            {
-                                foreach (Cell cell in ship.Cells)
-                                    cell.IsSinked = true;
-                                return OperationResult.sink;
-                            }
-                            else
-                            {
-                                return OperationResult.hit;
-                            }
-                        }
-                    }
-                }
-                
-            }
-            return OperationResult.mishit;
-        }
-
-        private Cell FindAdjacentCloakedCell(Ship shipUnderAttack, GameBoard userGameBoard)
-        {
-            foreach (var shipCell in shipUnderAttack.Cells)
-            {
-                Cell cellToTheRight = FindNeighbourCell(shipCell,userGameBoard,1,0);
-                if (cellToTheRight != null && cellToTheRight.IsCloaked)
-                    return cellToTheRight;
-                Cell cellToTheLeft = FindNeighbourCell(shipCell, userGameBoard, -1, 0); ;
-                if (cellToTheLeft != null && cellToTheLeft.IsCloaked)
-                    return cellToTheLeft;
-                Cell cellAbove = FindNeighbourCell(shipCell, userGameBoard, 0, -1); ;
-                if (cellAbove != null && cellAbove.IsCloaked)
-                    return cellAbove;
-                Cell cellBelow = FindNeighbourCell(shipCell, userGameBoard, 0, 1); ;
-                if (cellBelow != null && cellBelow.IsCloaked)
-                    return cellBelow;
-            }
-            //no cloaked cell found - that shouldn't occur - the ship would have been sinked
-            return null;
-        }
-
-        private static Cell FindNeighbourCell(Cell cell,GameBoard board, int xOffset, int yOffset)
-        {
-            var coordinatesWithOffset = new Coordinates
-            {
-                X = cell.Coordinates.X + xOffset,
-                Y = cell.Coordinates.Y + yOffset
-            };
-            return board.Cells.FirstOrDefault(c => c.Coordinates.Equals(coordinatesWithOffset));
         }
 
         private static Shape PickRandomShape()
