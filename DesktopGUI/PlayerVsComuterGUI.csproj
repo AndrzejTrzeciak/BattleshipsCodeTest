@@ -63,12 +63,22 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="CellExtensions.cs" />
     <Compile Include="GameViewPresenter.cs" />
-    <Compile Include="IMainView.cs" />
+    <Compile Include="GameCellState.cs" />
+    <Compile Include="Views\GameCell.xaml.cs">
+      <DependentUpon>GameCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\IGameCellView.cs" />
+    <Compile Include="Views\IMainView.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\GameCell.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -102,5 +112,6 @@
       <Name>Core</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

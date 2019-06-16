@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AppCore.Operations;
+using DesktopGUI.Views;
 
 namespace DesktopGUI
 {
@@ -12,7 +13,6 @@ namespace DesktopGUI
     {
         private IMainView mainView;
         private IOperationsManager operationsManager;
-        private GameBoard playerGameBoard;
         private GameBoard computerGameBoard;
 
         public GameViewPresenter(IMainView mainView, IOperationsManager operationsManager)
@@ -20,25 +20,18 @@ namespace DesktopGUI
             this.mainView = mainView;
             this.operationsManager = operationsManager;
             this.mainView.CellAttacked += HandleCellAttack;
-            this.mainView.ShipPlaced += PlacePlayerShip;
             this.mainView.GameReset += InitializeGameBoards;
-            InitializeGameBoards();
-        }
-
-        private void PlacePlayerShip(IEnumerable<Coordinates> shipCellCoordinates)
-        {
-            IEnumerable<Cell> shipCells = operationsManager.PlaceShipByPlayer(shipCellCoordinates, playerGameBoard);
-            foreach (var cell in shipCells)
-                mainView.SetCellState(cell.Coordinates, OperationResult.shipPlaced);
-
         }
 
         private void InitializeGameBoards()
         {
-            playerGameBoard = CreateCleanGameBoard();
             computerGameBoard = CreateCleanGameBoard();
+            foreach (var cell in computerGameBoard.Cells)
+            {
+                cell.IsCloaked = true;
+            }
             operationsManager.PlaceShipsForComputer(computerGameBoard);
-            mainView.GameInitialized = false; //player has to place his ships
+            mainView.RenderComputerGameBoard(computerGameBoard.Cells.Select(cell => cell.ToGameCellView()));
         }
 
         private static GameBoard CreateCleanGameBoard()
@@ -46,7 +39,8 @@ namespace DesktopGUI
             return new GameBoard
             {
                 BattleshipPlaced = false,
-                DestroyersCount = 0
+                DestroyersCount = 0,
+                Ships = new List<Ship>()
             };
         }
 
@@ -57,7 +51,7 @@ namespace DesktopGUI
                 Coordinates = cellCoordinates
             };
             OperationResult operationResult = operationsManager.PlaceShotByPlayer(cellCoordinates, computerGameBoard);
-            mainView.SetCellState(cellCoordinates,operationResult);
+            mainView.RenderComputerGameBoard(computerGameBoard.Cells.Select(c => c.ToGameCellView()));
             if (operationResult == OperationResult.sink)
             {
                 bool gameWonByPlayer = !computerGameBoard.Cells.Any(x => x.IsOccupied && !x.IsHit);
@@ -68,11 +62,11 @@ namespace DesktopGUI
                 }
                 else
                 {
-                    mainView.Inform("Ship sinked!");
+                    //mainView.Inform("Ship sinked!");
                 }
             }
-            else if (operationResult == OperationResult.hit)
-                mainView.Inform("It's a hit!");
+            //else if (operationResult == OperationResult.hit)
+                //mainView.Inform("It's a hit!");
         }
     }
 }

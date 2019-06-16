@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using AppCore.Model;
+using AppCore.Operations;
+using DesktopGUI.Views;
 
 namespace DesktopGUI
 {
@@ -21,30 +23,64 @@ namespace DesktopGUI
     /// </summary>
     public partial class MainWindow : Window, IMainView
     {
+        private List<IGameCellView> computerGameCells = new List<IGameCellView>();
+        public event Action<Coordinates> CellAttacked;
+        public event Action GameReset;
+
         public MainWindow()
         {
             InitializeComponent();
+            IOperationsManager manager = new OperationsManager();
+            var presenter = new GameViewPresenter(this,manager);
+            Dispatcher.Invoke(() => {
+                for (int x = 0; x < 10; x++)
+                {
+                    for (int y = 0; y < 10; y++)
+                    {
+                        var gameCellComputer = new GameCell(new Coordinates() { X = x, Y = y });
+                        Grid.SetColumn(gameCellComputer, x);
+                        Grid.SetRow(gameCellComputer, y);
+                        ComputerBoard.Children.Add(gameCellComputer);
+                        computerGameCells.Add(gameCellComputer);
+                    }
+                }
+            });
+            PrepareNewGame();
         }
 
-        public bool GameInitialized { get; set; }
-
-        public event Action<Coordinates> CellAttacked;
-        public event Action<IEnumerable<Coordinates>> ShipPlaced;
-        public event Action GameReset;
 
         public void Inform(string message)
         {
-            throw new NotImplementedException();
+            MessageBox.Show(message);
         }
 
         public void PrepareNewGame()
         {
-            throw new NotImplementedException();
+            GameReset?.Invoke();
+            foreach (IGameCellView computerGameCell in computerGameCells)
+            {
+                computerGameCell.ClearEvents();
+                computerGameCell.cellClicked += (coordinates) => CellAttacked?.Invoke(coordinates);
+            }
         }
 
-        public void SetCellState(Coordinates coordinates, OperationResult operationResult)
+        public void RenderComputerGameBoard(IEnumerable<IGameCellView> updatedGameCells)
         {
-            throw new NotImplementedException();
+            RenderBoard(updatedGameCells, computerGameCells);
+        }
+
+        private void RenderBoard(IEnumerable<IGameCellView> updatedGameCells,IEnumerable<IGameCellView> storedGameCells)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                foreach (var cellView in updatedGameCells)
+                {
+                    var matchingCellInGUI = storedGameCells
+                        .FirstOrDefault(cell => cell.Coordinates.Equals(cellView.Coordinates));
+                    matchingCellInGUI?.SetState(cellView.State);
+                }
+            });
+
         }
     }
 }

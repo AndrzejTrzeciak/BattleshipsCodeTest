@@ -5,8 +5,36 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DesktopGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="400">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+        </Grid.ColumnDefinitions>
+        <Grid Name="ComputerBoard" Grid.Column="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+                <ColumnDefinition Width="37"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+                <RowDefinition Height="37"/>
+            </Grid.RowDefinitions>
+        </Grid>
     </Grid>
 </Window>

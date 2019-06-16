@@ -41,7 +41,7 @@ namespace AppCore.Operations
             {
                 Shape shape = PickRandomShape();
                 List<Coordinates> coordinates= GenerateShipCoordinates(4,shape);
-                bool shipPlaced = TryPlaceShip(coordinates, computerGameBoard);
+                bool shipPlaced = TryPlaceShipForComputer(coordinates, computerGameBoard);
                 if (shipPlaced)
                     computerGameBoard.DestroyersCount++;
             }
@@ -50,14 +50,14 @@ namespace AppCore.Operations
             {
                 Shape shape = PickRandomShape();
                 List<Coordinates> coordinates = GenerateShipCoordinates(5,shape);
-                bool shipPlaced = TryPlaceShip(coordinates, computerGameBoard);
+                bool shipPlaced = TryPlaceShipForComputer(coordinates, computerGameBoard);
                 if (shipPlaced)
                     computerGameBoard.BattleshipPlaced = true;
             }
 
         }
 
-        private static bool TryPlaceShip(List<Coordinates> coordinatesToPlace, GameBoard computerGameBoard)
+        private static bool TryPlaceShipForComputer(List<Coordinates> coordinatesToPlace, GameBoard computerGameBoard)
         {
             foreach (var coordinate in coordinatesToPlace)
             {
@@ -207,7 +207,7 @@ namespace AppCore.Operations
                 {
                     foreach (var shipCell in ship.Cells)
                     {
-                        shipCell.IsSink = true;
+                        shipCell.IsSinked = true;
                     }
 
                     return OperationResult.sink;
@@ -223,7 +223,7 @@ namespace AppCore.Operations
         public OperationResult PlaceShotByComputer(GameBoard userGameBoard)
         {
             var shipUnderAttack =
-                userGameBoard.Ships.FirstOrDefault(ship => ship.Cells.Any(cell => cell.IsHit && !cell.IsSink));
+                userGameBoard.Ships.FirstOrDefault(ship => ship.Cells.Any(cell => cell.IsHit && !cell.IsSinked));
             if (shipUnderAttack != null)
             {
                 //shoot the adjacent cells to finnish the attack
@@ -238,7 +238,7 @@ namespace AppCore.Operations
                     {
                         foreach (var cell in ship.Cells)
                         {
-                            cell.IsSink = true;
+                            cell.IsSinked = true;
                         }
 
                         return OperationResult.sink;
@@ -269,7 +269,7 @@ namespace AppCore.Operations
                             if (ship.Cells.All(c => c.IsHit)) //that situation shouldn't occur, but just in case...
                             {
                                 foreach (Cell cell in ship.Cells)
-                                    cell.IsSink = true;
+                                    cell.IsSinked = true;
                                 return OperationResult.sink;
                             }
                             else
@@ -314,8 +314,6 @@ namespace AppCore.Operations
             };
             return board.Cells.FirstOrDefault(c => c.Coordinates.Equals(coordinatesWithOffset));
         }
-        // 1x Battleship(5 squares)
-        // 2x Destroyers(4 squares)
 
         private static Shape PickRandomShape()
         {
@@ -334,7 +332,7 @@ namespace AppCore.Operations
             return Shape.Asymmetrical_L_lookingDown;
         }
 
-        //explicite enumeration just to make the idea more readable/understandable - not needed from a technical point of view
+        //explicite enumeration just to make the idea more readable - not needed from a technical point of view
         private enum Shape
         {
             StraightVertical = 100,
