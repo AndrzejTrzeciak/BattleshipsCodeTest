@@ -1,5 +1,5 @@
-﻿using System;
-using AppCore.Model;
+﻿using AppCore.Model;
+using System;
 
 namespace DesktopGUI.Views
 {

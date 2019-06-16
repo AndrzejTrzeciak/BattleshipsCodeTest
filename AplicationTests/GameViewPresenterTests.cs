@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+﻿using AppCore.Model;
 using AppCore.Operations;
 using DesktopGUI;
+using DesktopGUI.Views;
 using Moq;
-using AppCore.Model;
+using NUnit.Framework;
 
 namespace AplicationTests
 {

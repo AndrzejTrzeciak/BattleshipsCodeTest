@@ -1,11 +1,11 @@
-﻿using System;
+﻿using AppCore.Model;
+using AppCore.Operations;
+using DesktopGUI.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using AppCore.Model;
-using AppCore.Operations;
-using DesktopGUI.Views;
 
 namespace DesktopGUI
 {

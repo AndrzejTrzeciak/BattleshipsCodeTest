@@ -1,9 +1,8 @@
-﻿using AppCore.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using DesktopGUI.Views;
+using AppCore.Model;
 
-namespace DesktopGUI
+namespace DesktopGUI.Views
 {
 
     public interface IMainView

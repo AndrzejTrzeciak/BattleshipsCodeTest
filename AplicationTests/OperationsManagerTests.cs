@@ -1,17 +1,14 @@
-﻿using NUnit.Framework;
+﻿using AppCore.Model;
+using AppCore.Operations;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.Operations;
-using DesktopGUI;
-using Moq;
-using AppCore.Model;
 
 namespace AplicationTests
 {
     [TestFixture]
     public class OperationsManagerTests : BattleShipTestBase
     {
-        private Mock<IMainView> mainViewMock = new Mock<IMainView>();
         private GameBoard board;
         public OperationsManagerTests()
         {

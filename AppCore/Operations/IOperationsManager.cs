@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using AppCore.Model;
+﻿using AppCore.Model;
 
 namespace AppCore.Operations
 {

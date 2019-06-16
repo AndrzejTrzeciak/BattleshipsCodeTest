@@ -1,8 +1,8 @@
-﻿using System;
+﻿using AppCore.Model;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using AppCore.Model;
 
 namespace DesktopGUI.Views
 {

@@ -1,7 +1,8 @@
 ﻿using AppCore.Model;
+using AppCore.Operations;
 using System.Collections.Generic;
 using System.Linq;
-using AppCore.Operations;
+using DesktopGUI.Views;
 
 namespace DesktopGUI
 {

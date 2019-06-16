@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using AppCore.Operations;
+using NUnit.Framework;
 using System.Linq;
-using AppCore.Operations;
+using AppCore.Utils;
 
 namespace AplicationTests
 {
