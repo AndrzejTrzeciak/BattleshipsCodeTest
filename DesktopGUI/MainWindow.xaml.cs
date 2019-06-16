@@ -31,20 +31,18 @@ namespace DesktopGUI
         {
             InitializeComponent();
             IOperationsManager manager = new OperationsManager();
-            var presenter = new GameViewPresenter(this,manager);
-            Dispatcher.Invoke(() => {
-                for (int x = 0; x < 10; x++)
+            var presenter = new GameViewPresenter(this, manager);
+            for (int x = 0; x < 10; x++)
+            {
+                for (int y = 0; y < 10; y++)
                 {
-                    for (int y = 0; y < 10; y++)
-                    {
-                        var gameCellComputer = new GameCell(new Coordinates() { X = x, Y = y });
-                        Grid.SetColumn(gameCellComputer, x);
-                        Grid.SetRow(gameCellComputer, y);
-                        ComputerBoard.Children.Add(gameCellComputer);
-                        computerGameCells.Add(gameCellComputer);
-                    }
+                    var gameCellComputer = new GameCell(new Coordinates() {X = x, Y = y});
+                    Grid.SetColumn(gameCellComputer, x);
+                    Grid.SetRow(gameCellComputer, y);
+                    ComputerBoard.Children.Add(gameCellComputer);
+                    computerGameCells.Add(gameCellComputer);
                 }
-            });
+            }
             PrepareNewGame();
         }
 
@@ -71,16 +69,12 @@ namespace DesktopGUI
 
         private void RenderBoard(IEnumerable<IGameCellView> updatedGameCells,IEnumerable<IGameCellView> storedGameCells)
         {
-            Dispatcher.Invoke(() =>
+            foreach (var cellView in updatedGameCells)
             {
-                foreach (var cellView in updatedGameCells)
-                {
-                    var matchingCellInGUI = storedGameCells
-                        .FirstOrDefault(cell => cell.Coordinates.Equals(cellView.Coordinates));
-                    matchingCellInGUI?.SetState(cellView.State);
-                }
-            });
-
+                var matchingCellInGUI = storedGameCells
+                    .FirstOrDefault(cell => cell.Coordinates.Equals(cellView.Coordinates));
+                matchingCellInGUI?.SetState(cellView.State);
+            }
         }
     }
 }
